@@ -15,11 +15,11 @@
 #define NUM_CYCLES_BETWEEN_PACKET (1000UL)
 #define TX_PACKET_LEN (64UL)
 
-void tx_endframe_callback(uint32_t timestamp);
-uint8_t packet[TX_PACKET_LEN] = {0};
+static void tx_endframe_callback(uint32_t timestamp);
+static uint8_t packet[TX_PACKET_LEN] = {0};
 
-uint8_t fine_code = 0;
-uint8_t mid_code = 0;
+static uint8_t fine_code = 0;
+static uint8_t mid_code = 0;
 
 int main(void) {
 
