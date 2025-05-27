@@ -9,12 +9,12 @@
 #include "scm3c_hw_interface.h"
 #include "scum.h"
 
-uint8_t packet[125] = {0};
-uint8_t packet_len = 125;
-int8_t rxpk_rssi = 0;
-uint8_t rxpk_lqi = 0;
+static uint8_t packet[125] = {0};
+static uint8_t packet_len = 125;
+static int8_t rxpk_rssi = 0;
+static uint8_t rxpk_lqi = 0;
 
-void rx_endframe_callback(uint32_t timestamp);
+static void rx_endframe_callback(uint32_t timestamp);
 
 int main(void) {
 
