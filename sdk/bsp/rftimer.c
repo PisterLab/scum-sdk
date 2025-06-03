@@ -26,7 +26,7 @@ static rftimer_vars_t rftimer_vars = { 0 };
 static bool delay_completed[NUM_INTERRUPTS] = { 0 };          // flag indicating whether the delay has
                                                               // completed. For use by
                                                               // delay_milliseoncds_synchronous method
-static bool is_repeating[NUM_INTERRUPTS] = { 0 };             // flag indicating whethere each COMPARE
+static bool is_repeating[NUM_INTERRUPTS] = { 0 };             // flag indicating whether each COMPARE
                                                               // will repeat at a fixed rate
 static unsigned int timer_durations[NUM_INTERRUPTS] = { 0 };  // indicates length each COMPARE
                                                               // interrupt was set to run for.
