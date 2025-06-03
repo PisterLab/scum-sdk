@@ -47,7 +47,7 @@ class ScumProgrammer:
         """Send a command to the SCuM."""
         pos = 0
         _command = hdlc_encode(command)
-        while (pos % USB_CHUNK_SIZE) == 0 and pos < len(_command):
+        while pos < len(_command):
             self.serial.write(_command[pos : pos + USB_CHUNK_SIZE])
             self.serial.flush()
             pos += USB_CHUNK_SIZE
