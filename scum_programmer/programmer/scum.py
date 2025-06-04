@@ -12,7 +12,7 @@ from .hdlc import hdlc_encode
 
 # Constants
 USB_CHUNK_SIZE = 64
-CHUNK_SIZE = 128
+CHUNK_SIZE = 1024
 
 
 class Command(IntEnum):

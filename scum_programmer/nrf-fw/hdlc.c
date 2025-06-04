@@ -4,17 +4,17 @@
 
 //=========================== definitions ======================================
 
-#define HDLC_BUFFER_SIZE    (UINT8_MAX)  ///< Maximum size of the RX buffer
-#define HDLC_FLAG           (0x7E)       ///< Start/End flag
-#define HDLC_FLAG_ESCAPED   (0x5E)       ///< Start/End flag escaped
-#define HDLC_ESCAPE         (0x7D)       ///< Data escape byte
-#define HDLC_ESCAPE_ESCAPED (0x5D)       ///< Escape flag escaped
-#define HDLC_FCS_INIT       (0xFFFF)     ///< Initialization value of the FCS
-#define HDLC_FCS_OK         (0xF0B8)     ///< Expected value of the FCS
+#define HDLC_BUFFER_SIZE    (2048U)   ///< Maximum size of the RX buffer
+#define HDLC_FLAG           (0x7E)    ///< Start/End flag
+#define HDLC_FLAG_ESCAPED   (0x5E)    ///< Start/End flag escaped
+#define HDLC_ESCAPE         (0x7D)    ///< Data escape byte
+#define HDLC_ESCAPE_ESCAPED (0x5D)    ///< Escape flag escaped
+#define HDLC_FCS_INIT       (0xFFFF)  ///< Initialization value of the FCS
+#define HDLC_FCS_OK         (0xF0B8)  ///< Expected value of the FCS
 
 typedef struct {
     uint8_t buffer[HDLC_BUFFER_SIZE];  ///< Input buffer
-    uint8_t buffer_pos;                ///< Current position in the input buffer
+    uint16_t buffer_pos;               ///< Current position in the input buffer
     hdlc_state_t state;                ///< Current state of the HDLC RX engine
     uint16_t fcs;                      ///< Current value of the FCS
 } hdlc_vars_t;
@@ -103,7 +103,7 @@ size_t hdlc_decode(uint8_t *output) {
         return output_pos;
     }
 
-    uint8_t input_pos = 0;
+    uint16_t input_pos = 0;
     bool escape_byte = false;
     while (input_pos < _hdlc_vars.buffer_pos) {
         uint8_t current_byte = _hdlc_vars.buffer[input_pos];
