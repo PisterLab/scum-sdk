@@ -15,8 +15,8 @@ SCuM programmer.
 //=========================== defines =========================================
 
 #define UART_BUF_SIZE    (32U)
-#define COMMAND_BUF_SIZE (256U)
-#define CHUNK_SIZE       (128U)
+#define COMMAND_BUF_SIZE (2048U)
+#define CHUNK_SIZE       (1024U)
 #define SCUM_MEM_SIZE    (1 << 16)  // 64KiB
 
 #define CALIBRATION_PORT    0UL
