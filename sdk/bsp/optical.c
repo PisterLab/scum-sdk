@@ -231,12 +231,14 @@ void OPTICAL_SFD_Handler(void) {
     // print statement
     // doing this prevent a long string of loads back to back
     printf(
-        "HF=%lu-%lu   2M=%lu-%lu",
-        count_HFclock, HF_CLOCK_fine,
-        count_2M, RC2M_coarse);
+        "HF=%lu-%lu-%lu   ",
+        count_HFclock, HF_CLOCK_fine, HF_CLOCK_coarse);
     printf(
-        ",%lu,%lu   LC=%lu-%lu   ",
-        RC2M_fine, RC2M_superfine,
+        "2M=%lu-%lu,%lu,%lu   ",
+        count_2M, RC2M_coarse,
+        RC2M_fine, RC2M_superfine);
+    printf(
+        "LC=%lu-%lu   ",
         count_LC, optical_vars.LC_code);
 #if defined(MODULE_RADIO)
     printf(
