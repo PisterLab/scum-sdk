@@ -353,7 +353,7 @@ void default_radio_rx_cb(uint8_t* packet, uint8_t packet_len) {
 
 void cb_timer_radio(void) {
     if (radio_vars.radio_mode == TX_MODE) {
-        // Tranmit the packet
+        // Transmit the packet
         radio_txNow();
     } else if (radio_vars.radio_mode == RX_MODE) {
         // Stop attempting to receive
