@@ -851,8 +851,6 @@ void RF_Handler(void) {
     unsigned int interrupt = SCUM_RF->INT;
     unsigned int error = SCUM_RF->ERROR;
 
-    printf("%08x\r\n",interrupt);
-
     gpio_2_set();
     gpio_6_set();
 
