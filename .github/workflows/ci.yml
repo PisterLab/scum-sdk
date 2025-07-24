@@ -101,6 +101,7 @@ jobs:
           hatch test .
       - name: Check package
         run:
+          rm -rf dist
           hatch build
       - name: Upload package artifacts
         uses: actions/upload-artifact@v4
