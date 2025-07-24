@@ -100,7 +100,7 @@ jobs:
         run:
           hatch test .
       - name: Check package
-        run:
+        run: |
           rm -rf dist
           hatch build
       - name: Upload package artifacts
