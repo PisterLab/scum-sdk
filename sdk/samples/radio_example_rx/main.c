@@ -7,19 +7,44 @@
 #include "radio.h"
 #include "rftimer.h"
 #include "scm3c_hw_interface.h"
+#include "scum.h"
 
-// Number of for loop cycles between Hello World messages.
-// 700000 for loop cycles roughly correspond to 1 second.
-#define NUM_CYCLES_BETWEEN_TX (1000000UL)
+uint8_t packet[125] = {0};
+uint8_t packet_len = 125;
+int8_t rxpk_rssi = 0;
+uint8_t rxpk_lqi = 0;
+
+void rx_endframe_callback(uint32_t timestamp);
 
 int main(void) {
 
-    LC_FREQCHANGE(0,0,0);
-    radio_rxEnable();
+    printf("Radio Receiver Example\n");
 
-    uint32_t g_tx_counter = 0;
+    radio_init();
+    LC_FREQCHANGE(0,20,15);
+    radio_setEndFrameRxCb(rx_endframe_callback);
+    radio_rxEnable();
+    radio_rxNow();
+
     while (1) {
-        printf("Hello World! %lu\n", g_tx_counter++);
-        busy_wait_cycles(NUM_CYCLES_BETWEEN_TX);
+        __WFE();
     }
+}
+
+void rx_endframe_callback(uint32_t timestamp) {
+    
+    radio_getReceivedFrame(     &(packet[0]), 
+                                &packet_len,
+                                sizeof(packet), 
+                                &rxpk_rssi,
+                                &rxpk_lqi      );
+    
+    for (uint8_t i = 0; i < packet_len - 2; i++) {
+        printf("%d ", packet[i]);
+    }
+    printf("\n");
+
+    radio_rxEnable();
+    radio_rxNow();
+                    
 }
