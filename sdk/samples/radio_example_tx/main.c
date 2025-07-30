@@ -18,9 +18,6 @@
 static void tx_endframe_callback(uint32_t timestamp);
 static uint8_t packet[TX_PACKET_LEN] = {0};
 
-static uint8_t fine_code = 0;
-static uint8_t mid_code = 0;
-
 int main(void) {
 
     printf("Radio Transmitter Example\n");
