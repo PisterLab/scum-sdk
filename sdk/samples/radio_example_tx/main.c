@@ -20,17 +20,21 @@ uint8_t packet[TX_PACKET_LEN] = {0};
 
 int main(void) {
     radio_init();
-    LC_FREQCHANGE(0,0,0);
-    radio_setEndFrameTxCb(tx_endframe_callback);
-    radio_loadPacket(packet, TX_PACKET_LEN + 2);
-    radio_txEnable();
-    busy_wait_cycles(NUM_CYCLES_BETWEEN_PACKET);
-    radio_txNow();
+    LC_FREQCHANGE(31,31,31);
+    //radio_setEndFrameTxCb(tx_endframe_callback);
+    //radio_loadPacket(packet, TX_PACKET_LEN + 2);
+    //radio_txEnable();
+    //radio_txNow();
 
-    uint32_t g_tx_counter = 0;
+    //busy_wait_cycles(NUM_CYCLES_BETWEEN_PACKET);
+    
+    radio_rxEnable();
+    radio_rxNow();
+
+    //uint32_t g_tx_counter = 0;
     while (1) {
-        printf("Hello World! %lu\n", g_tx_counter++);
-        busy_wait_cycles(NUM_CYCLES_BETWEEN_TX);
+        //printf("Hello World! %lu\n", g_tx_counter++);
+        //busy_wait_cycles(NUM_CYCLES_BETWEEN_TX);
     }
 }
 

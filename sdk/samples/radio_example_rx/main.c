@@ -15,7 +15,7 @@
 int main(void) {
 
     LC_FREQCHANGE(0,0,0);
-    radio_txEnable();
+    radio_rxEnable();
 
     uint32_t g_tx_counter = 0;
     while (1) {
