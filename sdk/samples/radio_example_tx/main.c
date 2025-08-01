@@ -30,8 +30,7 @@ int main(void) {
     radio_txNow();
 
     while (1) {
-        //printf("Hello World! %lu\n", g_tx_counter++);
-        //busy_wait_cycles(NUM_CYCLES_BETWEEN_TX);
+        __WFE();
     }
 }
 
