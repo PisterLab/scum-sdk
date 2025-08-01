@@ -1048,13 +1048,13 @@ void initialize_mote() {
         set_asc_bit(t);
     }
 
-//#if defined(MODULE_RADIO)
+#if defined(MODULE_RADIO)
     // Init RX
     radio_init_rx_MF();
 
     // Init TX
     radio_init_tx();
-//#endif
+#endif
 
     // activate divider
     radio_init_divider(2000);
