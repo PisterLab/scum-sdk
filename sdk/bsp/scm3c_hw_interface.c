@@ -1056,6 +1056,9 @@ void initialize_mote() {
     radio_init_tx();
 #endif
 
+    // activate divider
+    radio_init_divider(2000);
+
     // Set initial IF ADC clock frequency
     set_IF_clock_frequency(scm3c_hw_interface_vars.IF_coarse,
                            scm3c_hw_interface_vars.IF_fine, 0);

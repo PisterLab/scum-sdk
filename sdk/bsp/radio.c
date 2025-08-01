@@ -28,7 +28,7 @@ signed short cdr_tau_history[11] = {0};
 
 //=========================== definition ======================================
 
-// #define DIV_ON
+#define DIV_ON
 
 #define MAXLENGTH_TRX_BUFFER 128  // 1B length, 125B data, 2B CRC
 #define NUM_CHANNELS 16
