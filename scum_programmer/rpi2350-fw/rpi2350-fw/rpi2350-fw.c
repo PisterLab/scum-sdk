@@ -88,26 +88,25 @@ static void setup_uart(void) {
     uart1_hw->ibrd = int_part;
     uart1_hw->fbrd = frac_part;
 
-    uart1_hw->lcr_h = (3 << UART_UARTLCR_H_WLEN_LSB) |  // 8 bits
-    (1 << UART_UARTLCR_H_FEN_LSB);    // FIFO enable
+    uart1_hw->lcr_h =   (3 << UART_UARTLCR_H_WLEN_LSB) |  // 8 bits
+                        (1 << UART_UARTLCR_H_FEN_LSB);    // FIFO enable
 
     uart1_hw->cr =  (1 << UART_UARTCR_UARTEN_LSB)   |
                     (1 << UART_UARTCR_TXE_LSB)      |
                     (1 << UART_UARTCR_RXE_LSB);
 
-    // ----- 5. Configure RX DMA channel -----
+    // RX DMA
     dma_hw->ch[0].read_addr  = (uintptr_t)&uart1_hw->dr;
     dma_hw->ch[0].write_addr = (uintptr_t)&_programmer_vars.uart_rx_byte;
     dma_hw->ch[0].transfer_count = 1;
 
     dma_hw->ch[0].ctrl_trig =   (0 << DMA_CH0_CTRL_TRIG_DATA_SIZE_LSB) | 
-                                (0 << DMA_CH0_CTRL_TRIG_INCR_READ_LSB)  |  // fixed read (DR)
-                                (0 << DMA_CH0_CTRL_TRIG_INCR_WRITE_LSB) |  // fixed write (rx_byte)
-                                (0 << DMA_CH0_CTRL_TRIG_CHAIN_TO_LSB) | // retrigger self
+                                (0 << DMA_CH0_CTRL_TRIG_INCR_READ_LSB)  |   // fixed read (DR)
+                                (0 << DMA_CH0_CTRL_TRIG_INCR_WRITE_LSB) |   // fixed write (rx_byte)
+                                (0 << DMA_CH0_CTRL_TRIG_CHAIN_TO_LSB) |     // retrigger self
                                 DMA_CH0_CTRL_TRIG_EN_BITS;
 
-
-    // ----- 6. Configure TX DMA channel -----
+    // TX DMA 
     dma_hw->ch[1].read_addr  = (uintptr_t)_programmer_vars.uart_tx_buf;
     dma_hw->ch[1].write_addr = (uintptr_t)&uart1_hw->dr;
     dma_hw->ch[1].transfer_count = 0; // set when sending
@@ -117,10 +116,10 @@ static void setup_uart(void) {
                                 (0 << DMA_CH0_CTRL_TRIG_INCR_WRITE_LSB) |  // fixed write (DR)
                                 DMA_CH0_CTRL_TRIG_EN_BITS;
 
-    // ----- 7. Enable UART DMA requests -----
+    // Enable UART DMA
     uart1_hw->dmacr = UART_UARTDMACR_RXDMAE_BITS | UART_UARTDMACR_TXDMAE_BITS;
     
-    // enable interrupts:
+    // enable DMA0 interrupts:
     dma_hw->inte0 = 1;
 
 }
