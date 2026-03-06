@@ -69,6 +69,12 @@ class ScumProgrammer:
             sys.exit(1)
 
     def start(self):
+        # Flush any stale HDLC state on the nRF (terminates a stuck RECEIVING frame)
+        self.serial.write(b"\x7e")
+        self.serial.flush()
+        time.sleep(0.05)
+        self.serial.reset_input_buffer()  # discard the ERROR response or garbage
+
         command = bytearray()
         command += Command.START.to_bytes(1)
         self._send_command("start", command)
