@@ -8,7 +8,8 @@ MAIN_HELP_EXPECTED = """Usage: main [OPTIONS] FIRMWARE
 
 Options:
   -v, --version           Show the version and exit.
-  -p, --port TEXT         Serial port to use for nRF.
+  -p, --port TEXT         Serial port to use for nRF. If omitted, detected
+                          J-Link ports are listed.
   -b, --baudrate INTEGER  Baudrate to use for nRF.
   -c, --calibrate         Calibrate SCuM after flashing.
   -h, --help              Show this message and exit.
