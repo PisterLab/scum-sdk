@@ -52,8 +52,8 @@ typedef struct __attribute__((packed)) {
 } uart_command_t;
 
 typedef struct {
-    bool uart_byte_received;
-    uint8_t uart_rx_byte;
+    volatile bool uart_byte_received;
+    volatile uint8_t uart_rx_byte;
     uint8_t uart_tx_buf[UART_BUF_SIZE];
     uart_command_t uart_command;
 

@@ -17,6 +17,7 @@ typedef struct {
     uint16_t buffer_pos;               ///< Current position in the input buffer
     hdlc_state_t state;                ///< Current state of the HDLC RX engine
     uint16_t fcs;                      ///< Current value of the FCS
+    bool escape_pending;               ///< True if previous byte was an escape byte
 } hdlc_vars_t;
 
 //=========================== variables ========================================
@@ -75,14 +76,22 @@ hdlc_state_t hdlc_rx_byte(uint8_t byte) {
         // Beginning of frame
         _hdlc_vars.buffer_pos = 0;
         _hdlc_vars.fcs = HDLC_FCS_INIT;
+        _hdlc_vars.escape_pending = false;
         _hdlc_vars.state = HDLC_STATE_RECEIVING;
-    } else if (_hdlc_vars.buffer_pos > 0 && _hdlc_vars.state == HDLC_STATE_RECEIVING && byte == HDLC_FLAG) {
-        // End of frame
-        if (_hdlc_vars.fcs != HDLC_FCS_OK) {
-            // Invalid FCS
-            _hdlc_vars.state = HDLC_STATE_ERROR;
+    } else if (_hdlc_vars.state == HDLC_STATE_RECEIVING && byte == HDLC_FLAG) {
+        if (_hdlc_vars.buffer_pos == 0) {
+            // Back-to-back flags: restart frame
+            _hdlc_vars.fcs = HDLC_FCS_INIT;
+            _hdlc_vars.escape_pending = false;
+        } else {
+            // End of frame
+            _hdlc_vars.state = HDLC_STATE_READY;
+            if (_hdlc_vars.fcs != HDLC_FCS_OK) {
+                // Invalid FCS
+                _hdlc_vars.state = HDLC_STATE_ERROR;
+            }
         }
-        _hdlc_vars.state = HDLC_STATE_READY;
+
     } else if (_hdlc_vars.state == HDLC_STATE_RECEIVING) {
         // Middle of frame
         if (_hdlc_vars.buffer_pos >= HDLC_BUFFER_SIZE - 1) {
@@ -91,7 +100,17 @@ hdlc_state_t hdlc_rx_byte(uint8_t byte) {
             return _hdlc_vars.state;
         }
         _hdlc_vars.buffer[_hdlc_vars.buffer_pos++] = byte;
-        _hdlc_vars.fcs = _hdlc_update_fcs(_hdlc_vars.fcs, byte);
+        if (_hdlc_vars.escape_pending) {
+            // Compute FCS over the un-escaped value to match the sender
+            uint8_t actual = (byte == HDLC_ESCAPE_ESCAPED) ? HDLC_ESCAPE : HDLC_FLAG;
+            _hdlc_vars.fcs = _hdlc_update_fcs(_hdlc_vars.fcs, actual);
+            _hdlc_vars.escape_pending = false;
+        } else if (byte == HDLC_ESCAPE) {
+            _hdlc_vars.escape_pending = true;
+            // escape byte itself does not contribute to FCS
+        } else {
+            _hdlc_vars.fcs = _hdlc_update_fcs(_hdlc_vars.fcs, byte);
+        }
     }
 
     return _hdlc_vars.state;
